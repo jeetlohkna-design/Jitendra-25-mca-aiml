@@ -1,20 +1,63 @@
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Snake and Ladder Game</title>
-    <link rel="stylesheet" href="style.css">
+<title>Snake and Ladder</title>
+<style>
+body { text-align:center; font-family:Arial; }
+#board {
+  display:grid;
+  grid-template-columns:repeat(10,35px);
+  gap:3px;
+  justify-content:center;
+}
+.cell {
+  background:lightgreen;
+  padding:8px 0;
+  font-size:12px;
+}
+button { margin:15px; padding:10px; }
+</style>
 </head>
 <body>
 
-    <h1>Snake and Ladder Game</h1>
+<h2>🐍 Snake & Ladder 🪜</h2>
+<div id="board"></div>
+<h3 id="msg">Player 1 Turn</h3>
+<button onclick="roll()">Roll Dice 🎲</button>
 
-    <div id="board"></div>
+<script>
+let pos = [0,0], player = 0;
 
-    <button onclick="rollDice()">Roll Dice</button>
+let snakes = {99:54, 70:55, 25:2};
+let ladders = {4:14, 9:31, 20:38};
 
-    <h2 id="result">Position: 1</h2>
+for(let i=100;i>=1;i--)
+  board.innerHTML += `<div class="cell" id="c${i}">${i}</div>`;
 
-    <script src="script.js"></script>
+function roll(){
+  let dice = Math.floor(Math.random()*6)+1;
+  let p = pos[player]+dice;
+
+  if(p<=100) pos[player]=p;
+  if(snakes[pos[player]]) pos[player]=snakes[pos[player]];
+  if(ladders[pos[player]]) pos[player]=ladders[pos[player]];
+
+  document.querySelectorAll(".cell").forEach(c=>c.innerHTML=c.id.slice(1));
+
+  pos.forEach((n,i)=>{
+    if(n>0) document.getElementById("c"+n).innerHTML += i?"🔵":"🔴";
+  });
+
+  if(pos[player]===100){
+    msg.innerHTML="Player "+(player+1)+" Wins!";
+    return;
+  }
+
+  player=1-player;
+  msg.innerHTML="Player "+(player+1)+" Turn | Dice: "+dice;
+}
+</script>
 
 </body>
 </html>
